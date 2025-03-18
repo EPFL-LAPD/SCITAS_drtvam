@@ -1,13 +1,13 @@
 # SCITAS_drtvam
 
 1. Open CMD in Windows
-2. Do `ssh <username>@kuma.hpc.epfl.ch` bring you to the cluster
-3. Copy a `config.json` from your local computer to cluster
+2. Copy a `config.json` from your local computer to cluster
 ```
 scp -r <local-path-with/ply-and-config>/ <username>@kuma.hpc.epfl.ch:/home/<username>/
 ```
 4. You can also edit an existing file on the cluster with `nano <path-to-config>/config.json`
-5. To launch an optimization job, create a file called `optimize.sh`:
+5. Do `ssh <username>@kuma.hpc.epfl.ch` bring you to the cluster
+6. To launch an optimization job, create a file called `optimize.sh`:
 ```bash
 #!/bin/bash
 #SBATCH --job-name=drtvam
