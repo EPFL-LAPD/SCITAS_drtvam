@@ -38,3 +38,44 @@ apptainer run --bind /scratch/wechsler --nv /home/wechsler/mitsuba-vam/container
 scp -r <username>@kuma.hpc.epfl.ch:"/scratch/username/RR01" <local-path>/<where-you-want>
 ```
 9. Perform analysis of the optimization
+
+
+## Container file for Dr.TVAM on Scitas
+```
+Bootstrap: docker
+From: nvidia/cuda:12.6.0-cudnn-devel-ubuntu22.04
+%files
+        ~/mitsuba3 /mitsuba3
+        env.yml /env.yml
+
+%post -c /bin/bash
+        apt-get -y update
+        apt-get -y install git
+        apt-get -y install clang-15 libc++-15-dev libc++abi-15-dev cmake ninja-build
+        apt-get -y install curl libpng-dev libjpeg-dev
+        apt-get -y install libpython3-dev python3-setuptools python3-pip
+        # install micromamba
+        "${SHELL}" <(curl -L micro.mamba.pm/install.sh)
+        eval "$(/root/.local/bin/micromamba shell hook -s posix)"
+        micromamba create -f /env.yml
+        micromamba activate vam
+
+%environment
+        export MAMBA_ROOT_PREFIX=/root/micromamba
+
+%startscript
+        #!/bin/bash
+        export MAMBA_ROOT_PREFIX=/root/micromamba
+        echo "Container was created $NOW"
+        eval "$(/root/.local/bin/micromamba shell hook -s posix)"
+        micromamba activate vam
+
+%runscript
+        #!/bin/bash
+        echo "Container was created $NOW"
+        echo "Arguments received: $*"
+        eval "$(/root/.local/bin/micromamba shell hook -s posix)"
+        micromamba activate vam
+        exec $@
+~
+``
