@@ -36,5 +36,5 @@ apptainer run --bind /scratch/wechsler --nv /home/wechsler/mitsuba-vam/container
 7. Run `cat job_output_2025-03-17_13-26-47.log` or `cat job_error_2025-03-17_13-26-47.log` to see your output. The filename has a timestamp included, so use the right one.
 8. Synchronize patterns back to the computer. For example with
 ```bash
-scp <username>@kuma.hpc.epfl.ch:"/scratch/username/FVB02_sparse_2/patterns/*" <local-path>/<where-you-want>
+scp -r <username>@kuma.hpc.epfl.ch:"/scratch/username/RR01" <local-path>/<where-you-want>
 ```
