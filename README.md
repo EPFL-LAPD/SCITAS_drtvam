@@ -78,5 +78,5 @@ From: nvidia/cuda:12.6.0-cudnn-devel-ubuntu22.04
         eval "$(/root/.local/bin/micromamba shell hook -s posix)"
         micromamba activate vam
         exec $@
-~
-``
+
+```
