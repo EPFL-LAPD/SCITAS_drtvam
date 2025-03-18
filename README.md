@@ -1,13 +1,12 @@
 # SCITAS_drtvam
 
 1. Open CMD in Windows
-2. Copy a `config.json` from your local computer to cluster
+2. Create a folder on your local machine containing the `target.stl` and the `config.json`. Copy the whole folder from your local computer to cluster
 ```
 scp -r <local-path-with/ply-and-config>/ <username>@kuma.hpc.epfl.ch:/home/<username>/
 ```
-4. You can also edit an existing file on the cluster with `nano <path-to-config>/config.json`
-5. Do `ssh <username>@kuma.hpc.epfl.ch` bring you to the cluster
-6. To launch an optimization job, create a file called `optimize.sh`:
+3. Do `ssh <username>@kuma.hpc.epfl.ch` to access the cluster terminal
+4. To launch an optimization job, create a file (or use the existing one) called `optimize.sh`:
 ```bash
 #!/bin/bash
 #SBATCH --job-name=drtvam
@@ -34,7 +33,8 @@ apptainer run --bind /scratch/wechsler --nv /home/wechsler/mitsuba-vam/container
             367919      l40s   drtvam wechsler  R       3:07      1 kl001
 ```
 7. Run `cat job_output_2025-03-17_13-26-47.log` or `cat job_error_2025-03-17_13-26-47.log` to see your output. The filename has a timestamp included, so use the right one.
-8. Synchronize patterns back to the computer. For example with
+8. Once finished, synchronize patterns back to the computer. For example with
 ```bash
 scp -r <username>@kuma.hpc.epfl.ch:"/scratch/username/RR01" <local-path>/<where-you-want>
 ```
+9. Perform analysis of the optimization
