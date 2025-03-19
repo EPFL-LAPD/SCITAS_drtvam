@@ -45,38 +45,32 @@ Build container with: `srun --pty -p l40s -n 1 --cpus-per-task=16 --gpus-per-tas
 ```
 Bootstrap: docker
 From: nvidia/cuda:12.6.0-cudnn-devel-ubuntu22.04
-%files
-        ~/mitsuba3 /mitsuba3
-        env.yml /env.yml
 
 %post -c /bin/bash
         apt-get -y update
-        apt-get -y install git
-        apt-get -y install clang-15 libc++-15-dev libc++abi-15-dev cmake ninja-build
-        apt-get -y install curl libpng-dev libjpeg-dev
-        apt-get -y install libpython3-dev python3-setuptools python3-pip
-        # install micromamba
-        "${SHELL}" <(curl -L micro.mamba.pm/install.sh)
-        eval "$(/root/.local/bin/micromamba shell hook -s posix)"
-        micromamba create -f /env.yml
-        micromamba activate vam
+        apt-get -y install libpython3-dev python3-setuptools python3-pip python3-venv git
+        # Set up Python virtual environment
+        python3 -m venv /opt/venv
+        source /opt/venv/bin/activate
+        pip install --upgrade pip
+        pip install numpy mitsuba scipy matplotlib
+        pip install git+https://github.com/rgl-epfl/drtvam
 
 %environment
-        export MAMBA_ROOT_PREFIX=/root/micromamba
+        export VIRTUAL_ENV=/opt/venv
+        export PATH="$VIRTUAL_ENV/bin:$PATH"
 
 %startscript
         #!/bin/bash
-        export MAMBA_ROOT_PREFIX=/root/micromamba
+        source /opt/venv/bin/activate
         echo "Container was created $NOW"
-        eval "$(/root/.local/bin/micromamba shell hook -s posix)"
-        micromamba activate vam
 
 %runscript
         #!/bin/bash
         echo "Container was created $NOW"
         echo "Arguments received: $*"
-        eval "$(/root/.local/bin/micromamba shell hook -s posix)"
-        micromamba activate vam
+        source /opt/venv/bin/activate
         exec $@
+
 
 ```
