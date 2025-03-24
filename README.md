@@ -23,7 +23,7 @@ LOGFILE="`pwd`/logs/$(date '+%Y-%m-%d_%H-%M-%S').log"
 
 mkdir -p logs
 # Run the command
-apptainer run --bind /scratch/wechsler --nv /home/wechsler/mitsuba-vam/container_pip.sif drtvam $1 >>  "$LOGFILE" 2>&1
+apptainer run --bind /scratch/<username> --nv /home/<username>/container.sif drtvam $1 >>  "$LOGFILE" 2>&1
 ```
 
 5. To run an optimization, call: `sbatch optimize.sh /home/wechsler/TVAM_patterns/FVB02_sparse_2/config.json`
