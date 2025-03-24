@@ -16,14 +16,16 @@ scp -r <local-path-with/ply-and-config>/ <username>@kuma.hpc.epfl.ch:/home/<user
 #SBATCH --ntasks=1
 #SBATCH --gpus-per-task=1
 #SBATCH --mem=30G
-#SBATCH --time=00:30:00
+#SBATCH --time=01:05:00
 
-LOGFILE="`pwd`/job_output_$(date '+%Y-%m-%d_%H-%M-%S').log"
-ERRORFILE="`pwd`/job_error_$(date '+%Y-%m-%d_%H-%M-%S').log"
+LOGFILE="`pwd`/logs/$(date '+%Y-%m-%d_%H-%M-%S')_log.log"
 
+
+mkdir -p logs
 # Run the command
-apptainer run --bind /scratch/wechsler --nv /home/wechsler/mitsuba-vam/container_pip.sif drtvam $1 > "$LOGFILE" 2> "$ERRORFILE"
+apptainer run --bind /scratch/wechsler --nv /home/wechsler/mitsuba-vam/container_pip.sif drtvam 2>&1 $LOGFILE
 ```
+
 5. To run an optimization, call: `sbatch optimize.sh /home/wechsler/TVAM_patterns/FVB02_sparse_2/config.json`
 6. For example, inspect if your job is running. In this case my status is `ST R`, so it runs since 2mins.
 ```bash
@@ -32,7 +34,7 @@ apptainer run --bind /scratch/wechsler --nv /home/wechsler/mitsuba-vam/container
             367920      l40s   drtvam wechsler  R       2:28      1 kl001
             367919      l40s   drtvam wechsler  R       3:07      1 kl001
 ```
-7. Run `cat job_output_2025-03-17_13-26-47.log` or `cat job_error_2025-03-17_13-26-47.log` to see your output. The filename has a timestamp included, so use the right one.
+7. Run `cat logs/2025-03-17_13-26-47_log.log` to see your output. The filename has a timestamp included, so use the right one.
 8. Once finished, synchronize patterns back to the computer. For example with
 ```bash
 scp -r <username>@kuma.hpc.epfl.ch:"/scratch/username/RR01" <local-path>/<where-you-want>
