@@ -34,12 +34,12 @@ apptainer run --bind /scratch/wechsler --nv /home/wechsler/mitsuba-vam/container
             367920      l40s   drtvam wechsler  R       2:28      1 kl001
             367919      l40s   drtvam wechsler  R       3:07      1 kl001
 ```
-7. Run `cat logs/2025-03-17_13-26-47_log.log` to see your output. The filename has a timestamp included, so use the right one.
-8. Once finished, synchronize patterns back to the computer. For example with
+7. Run `cat logs/2025-03-17_13-26-47.log` to see your output. The filename has a timestamp included, so use the right one.
+8. Once finished, synchronize patterns back to the computer. On your local machine, execute 
 ```bash
 scp -r <username>@kuma.hpc.epfl.ch:"/scratch/username/RR01" <local-path>/<where-you-want>
 ```
-9. Perform analysis of the optimization
+9. Perform analysis of the optimization (`histogram.png`, patterns).
 
 
 ## Container file for Dr.TVAM on Scitas
