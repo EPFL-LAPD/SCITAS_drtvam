@@ -18,12 +18,13 @@ scp -r <local-path-with/ply-and-config>/ <username>@kuma.hpc.epfl.ch:/home/<user
 #SBATCH --mem=30G
 #SBATCH --time=01:05:00
 
-LOGFILE="`pwd`/logs/$(date '+%Y-%m-%d_%H-%M-%S')_log.log"
+LOGFILE="`pwd`/logs/$(date '+%Y-%m-%d_%H-%M-%S')_error.log"
+ERRORFILE="`pwd`/logs/$(date '+%Y-%m-%d_%H-%M-%S')_output.log"
 
 
 mkdir -p logs
 # Run the command
-apptainer run --bind /scratch/wechsler --nv /home/wechsler/mitsuba-vam/container_pip.sif drtvam 2>&1 $LOGFILE
+apptainer run --bind /scratch/wechsler --nv /home/wechsler/mitsuba-vam/container_pip.sif drtvam $1 >>  "$LOGFILE" 2>&1
 ```
 
 5. To run an optimization, call: `sbatch optimize.sh /home/wechsler/TVAM_patterns/FVB02_sparse_2/config.json`
