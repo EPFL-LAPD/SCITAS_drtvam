@@ -1,5 +1,19 @@
 # SCITAS_drtvam
 
+## Useful commands on Linux -> SCITAS
+* `ls`: lists all files in a directory
+* `cat`: prints a file content
+* `nano:`: simple editor to edit a file
+* `<TAB>`: autocomplete on the cluster
+
+
+## Optimize a new patterns
+* Copy a folder, on the cluster do:`cp FVR02 FVR03`.
+* `nano FVR03/config.json` and adapt values, then do `CTRL+X` save
+* `sbatch optimize.sh FVR03/config.json`
+
+
+# One Example
 1. Open CMD in Windows
 2. Create a folder on your local machine containing the `target.stl` and the `config.json`. Copy the whole folder from your local computer to cluster
 ```
