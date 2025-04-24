@@ -20,27 +20,54 @@
 scp -r <local-path-with/ply-and-config>/ <username>@kuma.hpc.epfl.ch:/home/<username>/
 ```
 3. Do `ssh <username>@kuma.hpc.epfl.ch` to access the cluster terminal
-4. To launch an optimization job, create a file (or use the existing one) called `optimize.sh`:
+4. To launch an optimization job, create a file (or use the existing one) called `optimize_slurm.sh`:
 ```bash
 #!/bin/bash
-#SBATCH --job-name=drtvam
+
+# Check if an argument is provided
+if [ $# -eq 0 ]; then
+    echo "Error: No argument provided. Please provide the path to the config file."
+    exit 1
+fi
+
+# Create a unique temporary file name based on the current timestamp
+temp_script=$(mktemp)
+
+# Extract the folder name from the provided path
+folder_name=$(basename "$(dirname "$1")")
+
+# Write the Slurm script content to the temporary file
+cat > "$temp_script" << EOF
+#!/bin/bash
+#SBATCH --job-name=$folder_name
 #SBATCH --output=job_output.log
 #SBATCH --error=job_error.log
 #SBATCH --partition=l40s
 #SBATCH --ntasks=1
 #SBATCH --gpus-per-task=1
 #SBATCH --mem=30G
-#SBATCH --time=01:05:00
+#SBATCH --time=00:45:00
+#SBATCH --cpus-per-task=16
 
-LOGFILE="`pwd`/logs/$(date '+%Y-%m-%d_%H-%M-%S').log"
-
+LOGFILE="\`pwd\`/logs/\$(date '+%Y-%m-%d_%H-%M-%S')_$folder_name.log"
 
 mkdir -p logs
 # Run the command
-apptainer run --bind /scratch/<username> --nv /home/<username>/container.sif drtvam $1 >>  "$LOGFILE" 2>&1
-```
+apptainer run --bind /scratch/$USER --nv /home/$USER/container.sif drtvam \$1 >> "\$LOGFILE" 2>&1
+EOF
 
-5. To run an optimization, call: `sbatch optimize.sh /home/wechsler/TVAM_patterns/FVB02_sparse_2/config.json`
+# Make the temporary script executable
+chmod +x "$temp_script"
+
+# Submit the job using sbatch
+sbatch "$temp_script" "$1"
+
+# Remove the temporary script (optional, but recommended to avoid clutter)
+rm "$temp_script"
+
+```
+4.2. (if the file is newly created, do `chmod +x optimize_slurm.sh`.
+5. To run an optimization, call: `./optimize_slurm.sh /home/wechsler/TVAM_patterns/FVB02_sparse_2/config.json`
 6. For example, inspect if your job is running. In this case my status is `ST R`, so it runs since 2mins.
 ```bash
 [wechsler@kuma1 ~]$ squeue -u wechsler
