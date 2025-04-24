@@ -66,7 +66,7 @@ sbatch "$temp_script" "$1"
 rm "$temp_script"
 
 ```
-4. (if the file is newly created, do `chmod +x optimize_slurm.sh`.
+4. (if the file is newly created, do `chmod +x optimize_slurm.sh`. You only need to do this once)
 5. To run an optimization, call: `./optimize_slurm.sh /home/wechsler/TVAM_patterns/FVB02_sparse_2/config.json`
 6. For example, inspect if your job is running. In this case my status is `ST R`, so it runs since 2mins.
 ```bash
