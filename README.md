@@ -24,9 +24,27 @@ scp -r <local-path-with/ply-and-config>/ <username>@kuma.hpc.epfl.ch:/home/<user
 ```bash
 #!/bin/bash
 
-# Check if an argument is provided
-if [ $# -eq 0 ]; then
-    echo "Error: No argument provided. Please provide the path to the config file."
+# Default time limit
+time_limit="00:45:00"
+
+# Parse command line arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --time=*)
+            time_limit="${1#*=}"
+            shift
+            ;;
+        *)
+            config_file="$1"
+            shift
+            ;;
+    esac
+done
+
+# Check if a config file is provided
+if [ -z "$config_file" ]; then
+    echo "Error: No config file provided. Please provide the path to the config file."
+    echo "Usage: $0 [--time=HH:MM:SS] config_file_path"
     exit 1
 fi
 
@@ -34,7 +52,7 @@ fi
 temp_script=$(mktemp)
 
 # Extract the folder name from the provided path
-folder_name=$(basename "$(dirname "$1")")
+folder_name=$(basename "$(dirname "$config_file")")
 
 # Write the Slurm script content to the temporary file
 cat > "$temp_script" << EOF
@@ -46,7 +64,7 @@ cat > "$temp_script" << EOF
 #SBATCH --ntasks=1
 #SBATCH --gpus-per-task=1
 #SBATCH --mem=30G
-#SBATCH --time=00:45:00
+#SBATCH --time=$time_limit
 #SBATCH --cpus-per-task=16
 
 LOGFILE="\`pwd\`/logs/\$(date '+%Y-%m-%d_%H-%M-%S')_$folder_name.log"
@@ -60,11 +78,10 @@ EOF
 chmod +x "$temp_script"
 
 # Submit the job using sbatch
-sbatch "$temp_script" "$1"
+sbatch "$temp_script" "$config_file"
 
 # Remove the temporary script (optional, but recommended to avoid clutter)
 rm "$temp_script"
-
 ```
 4. (if the file is newly created, do `chmod +x optimize_slurm.sh`. You only need to do this once)
 5. To run an optimization, call: `./optimize_slurm.sh /home/wechsler/TVAM_patterns/FVB02_sparse_2/config.json`
