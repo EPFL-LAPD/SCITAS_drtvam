@@ -30,7 +30,7 @@ time_limit="00:45:00"
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
-        --time=*)
+        --time_limit=*)
             time_limit="${1#*=}"
             shift
             ;;
@@ -44,7 +44,7 @@ done
 # Check if a config file is provided
 if [ -z "$config_file" ]; then
     echo "Error: No config file provided. Please provide the path to the config file."
-    echo "Usage: $0 [--time=HH:MM:SS] config_file_path"
+    echo "Usage: $0 [--time_limit=HH:MM:SS] config_file_path"
     exit 1
 fi
 
@@ -82,6 +82,7 @@ sbatch "$temp_script" "$config_file"
 
 # Remove the temporary script (optional, but recommended to avoid clutter)
 rm "$temp_script"
+
 ```
 4. (if the file is newly created, do `chmod +x optimize_slurm.sh`. You only need to do this once)
 5. To run an optimization, call: `./optimize_slurm.sh /home/wechsler/TVAM_patterns/FVB02_sparse_2/config.json`
