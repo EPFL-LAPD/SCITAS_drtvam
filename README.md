@@ -10,7 +10,7 @@
 ## Optimize a new patterns
 * Copy a folder, on the cluster do:`cp -r FVR02 FVR03`
 * `nano FVR03/config.json` and adapt values (change `output:`!), then do `CTRL+X` save
-* `sbatch optimize.sh FVR03/config.json`
+* `./optimize_slurm.sh FVR03/config.json`
 
 
 # One Example
