@@ -86,11 +86,10 @@ rm "$temp_script"
 ```
 4. (if the file is newly created, do `chmod +x optimize_slurm.sh`. You only need to do this once)
 5. To run an optimization, call: `./optimize_slurm.sh /home/wechsler/TVAM_patterns/FVB02_sparse_2/config.json`
-6. For example, inspect if your job is running. In this case my status is `ST R`, so it runs since 2mins.
+6. For example, inspect if your job is running. In this case my status is `ST R`, so it runs since 23mins.
 ```bash
 [wechsler@kuma2 ~]$ squeue -u wechsler
              JOBID PARTITION     NAME     USER ST       TIME  NODES NODELIST(REASON)
-            456276      l40s     FVJ5 wechsler  R       0:00      1 kl010
             456134      l40s   drtvam wechsler  R      23:37      1 kl001
 ```
 7. Run `cat logs/2025-04-24_11-48-26_FVJ5.log` to see your output. The filename has a timestamp and the folder name included, so use the right one.
