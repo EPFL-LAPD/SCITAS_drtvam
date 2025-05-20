@@ -26,6 +26,7 @@ scp -r <local-path-with/ply-and-config>/ <username>@kuma.hpc.epfl.ch:/home/<user
 
 # Default time limit
 time_limit="00:45:00"
+additional_args=""
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -34,8 +35,19 @@ while [[ $# -gt 0 ]]; do
             time_limit="${1#*=}"
             shift
             ;;
+        -D*)
+            # Capture arguments starting with -D to pass to drtvam
+            additional_args="$additional_args $1"
+            shift
+            ;;
         *)
-            config_file="$1"
+            # First non-option argument is the config file
+            if [ -z "$config_file" ]; then
+                config_file="$1"
+            else
+                # Any other arguments get added to additional_args
+                additional_args="$additional_args $1"
+            fi
             shift
             ;;
     esac
@@ -44,7 +56,7 @@ done
 # Check if a config file is provided
 if [ -z "$config_file" ]; then
     echo "Error: No config file provided. Please provide the path to the config file."
-    echo "Usage: $0 [--time_limit=HH:MM:SS] config_file_path"
+    echo "Usage: $0 [--time_limit=HH:MM:SS] config_file_path [additional arguments for drtvam]"
     exit 1
 fi
 
@@ -71,7 +83,7 @@ LOGFILE="\`pwd\`/logs/\$(date '+%Y-%m-%d_%H-%M-%S')_$folder_name.log"
 
 mkdir -p logs
 # Run the command
-apptainer run --bind /scratch/$USER --nv /home/$USER/container.sif drtvam \$1 >> "\$LOGFILE" 2>&1
+apptainer run --bind /scratch/$USER --nv /home/$USER/container.sif drtvam \$1 $additional_args >> "\$LOGFILE" 2>&1
 EOF
 
 # Make the temporary script executable
@@ -82,7 +94,6 @@ sbatch "$temp_script" "$config_file"
 
 # Remove the temporary script (optional, but recommended to avoid clutter)
 rm "$temp_script"
-
 ```
 4. (if the file is newly created, do `chmod +x optimize_slurm.sh`. You only need to do this once)
 5. To run an optimization, call: `./optimize_slurm.sh /home/wechsler/TVAM_patterns/FVB02_sparse_2/config.json`
