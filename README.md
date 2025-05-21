@@ -24,8 +24,9 @@ scp -r <local-path-with/ply-and-config>/ <username>@kuma.hpc.epfl.ch:/home/<user
 ```bash
 #!/bin/bash
 
-# Default time limit
+# Default values
 time_limit="00:45:00"
+gpu_type="l40s"  # Default GPU type
 additional_args=""
 
 # Parse command line arguments
@@ -33,6 +34,10 @@ while [[ $# -gt 0 ]]; do
     case $1 in
         --time_limit=*)
             time_limit="${1#*=}"
+            shift
+            ;;
+        --gpu=*)
+            gpu_type="${1#*=}"
             shift
             ;;
         -D*)
@@ -56,9 +61,19 @@ done
 # Check if a config file is provided
 if [ -z "$config_file" ]; then
     echo "Error: No config file provided. Please provide the path to the config file."
-    echo "Usage: $0 [--time_limit=HH:MM:SS] config_file_path [additional arguments for drtvam]"
+    echo "Usage: $0 [--time_limit=HH:MM:SS] [--gpu=h100|l40s] config_file_path [additional arguments for drtvam]"
     exit 1
 fi
+
+# Validate GPU type
+if [[ "$gpu_type" != "h100" && "$gpu_type" != "l40s" ]]; then
+    echo "Error: Invalid GPU type. Supported types are 'h100' or 'l40s'."
+    echo "Usage: $0 [--time_limit=HH:MM:SS] [--gpu=h100|l40s] config_file_path [additional arguments for drtvam]"
+    exit 1
+fi
+
+# Set partition based on GPU type
+partition="$gpu_type"
 
 # Create a unique temporary file name based on the current timestamp
 temp_script=$(mktemp)
@@ -72,14 +87,14 @@ cat > "$temp_script" << EOF
 #SBATCH --job-name=$folder_name
 #SBATCH --output=job_output.log
 #SBATCH --error=job_error.log
-#SBATCH --partition=l40s
+#SBATCH --partition=$partition
 #SBATCH --ntasks=1
 #SBATCH --gpus-per-task=1
 #SBATCH --mem=30G
 #SBATCH --time=$time_limit
 #SBATCH --cpus-per-task=16
 
-LOGFILE="\`pwd\`/logs/\$(date '+%Y-%m-%d_%H-%M-%S')_$folder_name.log"
+LOGFILE="\`pwd\`/logs/\$(date '+%Y-%m-%d_%H-%M-%S')_${folder_name}_${gpu_type}.log"
 
 mkdir -p logs
 # Run the command
@@ -90,9 +105,10 @@ EOF
 chmod +x "$temp_script"
 
 # Submit the job using sbatch
+echo "Submitting job to $gpu_type partition with time limit $time_limit"
 sbatch "$temp_script" "$config_file"
 
-# Remove the temporary script (optional, but recommended to avoid clutter)
+# Remove the temporary script
 rm "$temp_script"
 ```
 4. (if the file is newly created, do `chmod +x optimize_slurm.sh`. You only need to do this once)
