@@ -171,3 +171,12 @@ From: nvidia/cuda:12.6.0-cudnn-devel-ubuntu22.04
 
 ## Vials Refractive Index
 
+* fisher_brand_shell_vial_4ml_clear_15x45mm
+    * $r_{int} = (6.363125 \pm 0.016677080080157898)mm$
+    * $r_{out} = (7.354374999999999 \pm 0.01613281925587897)mm$
+* small chemshop vials
+    * $r_{int} = (5.680909090909091 \pm 0.027822489268412198)mm$
+    * $r_{out} = (6.475454545454546 \pm 0.029954510967010104)mm$
+* large chemshop vials  
+    * $r_{int} = (7.667142857142857 \pm 0.03773340063934754)mm$
+    * $r_{out} = (8.382857142857144 \pm 0.03935491740315977)mm$
