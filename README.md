@@ -160,3 +160,14 @@ From: nvidia/cuda:12.6.0-cudnn-devel-ubuntu22.04
         source /opt/venv/bin/activate
         exec $@
 ```
+
+
+
+# Standard values for resins and cuvettes
+
+## Resin
+* Sartometer: $n=1.4849$
+* DUDMA:PEGDA 4:1 $n=1.4803$
+
+## Vials Refractive Index
+
