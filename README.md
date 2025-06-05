@@ -180,3 +180,7 @@ From: nvidia/cuda:12.6.0-cudnn-devel-ubuntu22.04
 * large chemshop vials  
     * $r_{int} = (7.667142857142857 \pm 0.03773340063934754)mm$
     * $r_{out} = (8.382857142857144 \pm 0.03935491740315977)mm$
+* square uv transparent vials  
+    * $w_{int} = (10.194999999999999 \pm 0.022509257354845793)mm$
+    * $w_{out} = (12.4125 \pm 0.015705625319185994)mm$
+ 
