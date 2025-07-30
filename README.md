@@ -178,6 +178,7 @@ srun --pty -p l40s -n 1 --cpus-per-task=16 --gpus-per-task=1  --time=00:10:00 ap
 * fisher_brand_shell_vial_4ml_clear_15x45mm
     * $r_{int} = (6.363125 \pm 0.016677080080157898)mm$
     * $r_{out} = (7.354374999999999 \pm 0.01613281925587897)mm$
+    * $n=1.52$
 * small chemshop vials
     * $r_{int} = (5.680909090909091 \pm 0.027822489268412198)mm$
     * $r_{out} = (6.475454545454546 \pm 0.029954510967010104)mm$
