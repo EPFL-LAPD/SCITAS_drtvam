@@ -167,6 +167,14 @@ srun --pty -p l40s -n 1 --cpus-per-task=16 --gpus-per-task=1  --time=00:10:00 ap
 ```
 
 
+## Pro trick to launch parameter sweeep
+
+For example, to find the right sparsity value I can simply launch many jobs in one command:
+```bash
+for x in 1e-17 1e-18 1e-19 1e-20 1e-21 1e-22 1e-23 1e-24; do ./optimize_slurm.sh --time_limit=01:50:00 --gpu=l40s TVAM_patterns/striation_LED_vertical/config.json  -Dloss.weight_sparsity=$x -Doutput=/scratch/wechsler/striation_LED_vertical_$x; done
+```
+It loops over different sparsity values and launches for each one a job
+
 # Standard values for resins and cuvettes
 
 ## Resin
