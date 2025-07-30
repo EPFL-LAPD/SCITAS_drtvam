@@ -129,7 +129,7 @@ scp -r <username>@kuma.hpc.epfl.ch:"/scratch/username/RR01" <local-path>/<where-
 
 ## Container file for Dr.TVAM on Scitas
 This needs to be done if we update [Dr.TVAM](https://github.com/rgl-epfl/drtvam) or cluster account has no container with the software installed.
-Build container with: `srun --pty -p l40s -n 1 --cpus-per-task=16 --gpus-per-task=1  --time=00:10:00 apptainer build --force container.sif container.def`
+Create a file name `container.def`
 ```
 Bootstrap: docker
 From: nvidia/cuda:12.6.0-cudnn-devel-ubuntu22.04
@@ -161,6 +161,10 @@ From: nvidia/cuda:12.6.0-cudnn-devel-ubuntu22.04
         exec $@
 ```
 
+and after run this command to build the container
+```
+srun --pty -p l40s -n 1 --cpus-per-task=16 --gpus-per-task=1  --time=00:10:00 apptainer build --force container.sif container.def
+``
 
 
 # Standard values for resins and cuvettes
