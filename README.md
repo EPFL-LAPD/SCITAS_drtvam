@@ -164,7 +164,7 @@ From: nvidia/cuda:12.6.0-cudnn-devel-ubuntu22.04
 and after run this command to build the container
 ```
 srun --pty -p l40s -n 1 --cpus-per-task=16 --gpus-per-task=1  --time=00:10:00 apptainer build --force container.sif container.def
-``
+```
 
 
 # Standard values for resins and cuvettes
