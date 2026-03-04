@@ -92,7 +92,7 @@ cat > "$temp_script" << EOF
 #SBATCH --gpus-per-task=1
 #SBATCH --mem=30G
 #SBATCH --time=$time_limit
-#SBATCH --cpus-per-task=16
+#SBATCH --cpus-per-task=8
 
 LOGFILE="\`pwd\`/logs/\$(date '+%Y-%m-%d_%H-%M-%S')_${folder_name}_${gpu_type}.log"
 
@@ -163,7 +163,7 @@ From: nvidia/cuda:12.6.0-cudnn-devel-ubuntu22.04
 
 and after run this command to build the container
 ```
-srun --pty -p l40s -n 1 --cpus-per-task=16 --gpus-per-task=1  --time=00:10:00 apptainer build --force container.sif container.def
+srun --pty -p l40s -n 1 --cpus-per-task=8 --gpus-per-task=1  --time=00:10:00 apptainer build --force container.sif container.def
 ```
 
 
