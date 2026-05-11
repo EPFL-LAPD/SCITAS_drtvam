@@ -1,19 +1,19 @@
-# SCITAS_drtvam
+# 1. SCITAS_drtvam
 
-## Useful commands on Linux -> SCITAS
+## 1.1 Useful commands on Linux -> SCITAS
 * `ls`: lists all files in a directory
 * `cat`: prints a file content
 * `nano:`: simple editor to edit a file
 * `<TAB>`: autocomplete on the cluster
 
 
-## Optimize a new patterns
+## 1.2 Optimize a new patterns
 * Copy a folder, on the cluster do:`cp -r FVR02 FVR03`
 * `nano FVR03/config.json` and adapt values (change `output:`!), then do `CTRL+X` save
 * `./optimize_slurm.sh FVR03/config.json`
 
 
-# One Example
+# 2 One Example
 1. Open CMD in Windows
 2. Create a folder on your local machine containing the `target.stl` and the `config.json`. Copy the whole folder from your local computer to cluster
 ```
@@ -127,7 +127,7 @@ scp -r <username>@kuma.hpc.epfl.ch:"/scratch/username/RR01" <local-path>/<where-
 9. Perform analysis of the optimization (`histogram.png`, patterns).
 
 
-## Container file for Dr.TVAM on Scitas
+# 3 Container file for Dr.TVAM on Scitas
 This needs to be done if we update [Dr.TVAM](https://github.com/rgl-epfl/drtvam) or cluster account has no container with the software installed.
 Create a file name `container.def`
 ```
@@ -167,7 +167,7 @@ srun --pty -p l40s -n 1 --cpus-per-task=8 --gpus-per-task=1  --time=00:10:00 app
 ```
 
 
-## Pro trick to launch parameter sweeep
+## 3.1 Pro trick to launch parameter sweeep
 
 For example, to find the right sparsity value I can simply launch many jobs in one command:
 ```bash
@@ -175,7 +175,7 @@ for x in 1e-17 1e-18 1e-19 1e-20 1e-21 1e-22 1e-23 1e-24; do ./optimize_slurm.sh
 ```
 It loops over different sparsity values and launches for each one a job
 
-# Standard values for resins and cuvettes
+# 4 Standard values for resins and cuvettes
 
 ## Resin
 * Sartometer: $n=1.4849$
